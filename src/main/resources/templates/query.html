@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head th:replace="~{fragments :: head('Запити до БД')}"></head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<div class="content">
+    <h1>Запити до бази даних</h1>
+    <p>Введіть запит SELECT (дозволено лише читання) або оберіть готовий приклад.</p>
+    <ul class="msg" th:if="${error}"><li class="error" th:text="${error}"></li></ul>
+
+    <form th:action="@{/query}" method="post">
+        <textarea name="sql" rows="6" th:text="${sql}"></textarea>
+        <p>
+            <button type="submit">Виконати</button>
+            <a class="button" th:href="@{/query(example=0)}">Приклад 1: незавершені ремонти</a>
+            <a class="button" th:href="@{/query(example=1)}">Приклад 2: витрати по авто</a>
+            <a class="button" th:href="@{/query(example=2)}">Приклад 3: старі авто</a>
+        </p>
+    </form>
+
+    <div th:if="${result != null}">
+        <h2>Результат (рядків: <span th:text="${#lists.size(result.rows)}">0</span>)</h2>
+        <table class="result">
+            <tr><th th:each="col : ${result.columns}" th:text="${col}"></th></tr>
+            <tr th:each="row : ${result.rows}">
+                <td th:each="cell : ${row}" th:text="${cell}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

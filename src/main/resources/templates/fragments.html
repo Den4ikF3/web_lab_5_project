@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <title th:text="${title}">СТО</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="menu" th:fragment="menu">
+    <a th:href="@{/}">Головна</a>
+    <a th:href="@{/cars}">Автомобілі</a>
+    <a th:href="@{/repairs}">Ремонти</a>
+    <a th:href="@{/query}">Запити до БД</a>
+</div>
+</body>
+</html>

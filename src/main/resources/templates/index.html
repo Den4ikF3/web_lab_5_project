@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head th:replace="~{fragments :: head('СТО')}"></head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<div class="content">
+    <h1>СТО «АвтоМайстер»</h1>
+    <p>Веб-застосунок на Spring Boot для роботи з базою даних станції технічного обслуговування (PostgreSQL).</p>
+    <ul>
+        <li><a th:href="@{/cars}">Автомобілі</a> — перегляд, додавання, редагування та видалення автомобілів</li>
+        <li><a th:href="@{/repairs}">Ремонти</a> — облік виконаних і запланованих робіт</li>
+        <li><a th:href="@{/query}">Запити до БД</a> — виконання SELECT-запитів з виведенням результатів</li>
+    </ul>
+</div>
+</body>
+</html>

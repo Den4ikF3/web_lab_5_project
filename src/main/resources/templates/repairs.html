@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head th:replace="~{fragments :: head('Ремонти')}"></head>
+<body>
+<div th:replace="~{fragments :: menu}"></div>
+<div class="content">
+    <h1>Ремонти</h1>
+    <ul class="msg" th:if="${message}"><li class="info" th:text="${message}"></li></ul>
+
+    <form th:action="@{/repairs}" th:object="${repair}" method="post">
+        <h2 th:text="${repair.id == null} ? 'Новий ремонт' : 'Редагування ремонту'">Новий ремонт</h2>
+        <ul class="msg" th:if="${#fields.hasGlobalErrors()}">
+            <li class="error" th:each="e : ${#fields.globalErrors()}" th:text="${e}"></li>
+        </ul>
+        <input type="hidden" th:field="*{id}">
+        <table class="form">
+            <tr>
+                <td><label for="carId">Автомобіль:</label></td>
+                <td>
+                    <select th:field="*{carId}">
+                        <option value="">— оберіть —</option>
+                        <option th:each="c : ${cars}" th:value="${c.id}"
+                                th:text="${c.plate + ' — ' + c.brand + ' ' + c.model}"></option>
+                    </select>
+                    <span class="err" th:if="${#fields.hasErrors('carId')}" th:errors="*{carId}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="description">Опис робіт:</label></td>
+                <td><input type="text" th:field="*{description}" maxlength="200" size="40">
+                    <span class="err" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span></td>
+            </tr>
+            <tr>
+                <td><label for="price">Вартість, грн:</label></td>
+                <td><input type="number" step="0.01" min="0" th:field="*{price}">
+                    <span class="err" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span></td>
+            </tr>
+            <tr>
+                <td><label for="repairDate">Дата:</label></td>
+                <td><input type="date" th:field="*{repairDate}">
+                    <span class="err" th:if="${#fields.hasErrors('repairDate')}" th:errors="*{repairDate}"></span></td>
+            </tr>
+            <tr>
+                <td><label for="status">Статус:</label></td>
+                <td>
+                    <select th:field="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <p>
+            <button type="submit" th:text="${repair.id == null} ? 'Додати' : 'Зберегти'">Додати</button>
+            <a class="button" th:if="${repair.id != null}" th:href="@{/repairs}">Скасувати</a>
+        </p>
+    </form>
+
+    <h2>Список ремонтів</h2>
+    <table class="grid">
+        <tr>
+            <th>ID</th><th>Автомобіль</th><th>Опис робіт</th><th>Вартість, грн</th><th>Дата</th><th>Статус</th><th>Дії</th>
+        </tr>
+        <tr th:each="r : ${repairs}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.car.plate}"></td>
+            <td th:text="${r.description}"></td>
+            <td th:text="${r.price}"></td>
+            <td th:text="${#temporals.format(r.repairDate, 'dd.MM.yyyy')}"></td>
+            <td th:text="${r.status}"></td>
+            <td>
+                <a class="button" th:href="@{/repairs(edit=${r.id})}">Редагувати</a>
+                <form class="inline" th:action="@{/repairs/{id}/delete(id=${r.id})}" method="post"
+                      th:onsubmit="|return confirm('Видалити ремонт №${r.id}?');|">
+                    <button type="submit">Видалити</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
